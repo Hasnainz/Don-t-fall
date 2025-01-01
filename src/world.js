@@ -54,8 +54,7 @@ export class World {
 
     if (this.level == 1) {
       this.LoadLevel1();
-    }
-    else if (this.level == 2) {
+    } else if (this.level == 2) {
       this.LoadLevel2();
     }
 
@@ -94,6 +93,7 @@ export class World {
       scene: this._scene,
       RAPIER: RAPIER,
       world: this.world,
+      start: { x: -670, y: 755, z: 905 },
     };
     this._controls = new CharacterController(params);
 
@@ -117,13 +117,12 @@ export class World {
     });
   }
 
-  AddFixedCube(size, location, color, texture) {
+  AddFixedCube(size, location, color, texture, rotation) {
+    const R = new THREE.Quaternion().setFromEuler(rotation);
     const cube1 = { x: size.x, y: size.y, z: size.z };
-    let bodydesc = RAPIER.RigidBodyDesc.fixed().setTranslation(
-      location.x,
-      location.y,
-      location.z
-    );
+    let bodydesc = RAPIER.RigidBodyDesc.fixed()
+      .setTranslation(location.x, location.y, location.z)
+      .setRotation({ w: R.w, x: R.x, y: R.y, z: R.z });
     let cubebody = this.world.createRigidBody(bodydesc);
     let cubecollider = RAPIER.ColliderDesc.cuboid(cube1.x, cube1.y, cube1.z);
     this.world.createCollider(cubecollider, cubebody);
@@ -153,36 +152,58 @@ export class World {
     this.bodys = [];
     const loader = new THREE.TextureLoader();
     const wood = loader.load("../assets/textures/wood.jpg");
+    const rotation = new THREE.Euler(0, 0, 0);
 
     this.AddFixedCube(
-      { x: 350.0, y: 0.1, z: 350 },
-      { x: 0, y: 0, z: 0 },
-      0xafafaf
+      { x: 50.0, y: 0.1, z: 350 },
+      { x: 0, y: 0, z: 320 },
+      0,
+      wood,
+      rotation
     );
+
+    for (let i = 0; i < 19; i++) {
+      this.AddFixedCube(
+        { x: 15, y: 1, z: 8 },
+        { x: 45 + i * 15, y: 15 + i * 10, z: 15 + i * 30 },
+        0x1000fa,
+        wood,
+        new THREE.Euler(0, 1.4 - 0.4 * i, 0)
+      );
+    }
     this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 15, z: 15 },
+      { x: 25, y: 1, z: 30 },
+      { x: 345, y: 215, z: 615 },
       0x1000fa,
-      wood
+      wood,
+      new THREE.Euler(0, 0, 0)
     );
+
+    for (let i = 1; i < 30; i++) {
+      this.AddFixedCube(
+        { x: 8, y: 1, z: 20 },
+        { x: 345 - i * 35, y: 215 + i * 15, z: 615 + i * 10 },
+        0x1000fa,
+        wood,
+        new THREE.Euler(0, 1.4 - 0.2 * i, 0)
+      );
+    }
+
     this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 30, z: 30 },
+      { x: 30, y: 1, z: 30 },
+      { x: -705, y: 155, z: 915 },
       0x1000fa,
-      wood
+      wood,
+      new THREE.Euler(0, 0, 0)
     );
-    this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 45, z: 45 },
-      0x1000fa,
-      wood
-    );
-    this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 60, z: 60 },
-      0x1000fa,
-      wood
-    );
+
+    // this.AddFixedCube(
+    //   { x: 15, y: 1, z: 8 },
+    //   { x: 65, y: 30, z: 25 },
+    //   0x1000fa,
+    //   wood,
+    //   new THREE.Euler(0, 1.2, 0)
+    // );
   }
   LoadLevel2() {
     let gravity = new RAPIER.Vector3(0.0, -9.81, 0.0);
@@ -190,35 +211,14 @@ export class World {
     this.bodys = [];
     const loader = new THREE.TextureLoader();
     const brick = loader.load("../assets/textures/brick.jpg");
+    const rotation = new THREE.Euler(0, 0, 0);
 
     this.AddFixedCube(
       { x: 350.0, y: 0.1, z: 350 },
       { x: 0, y: 0, z: 0 },
-      0xafafaf
-    );
-    this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 15, z: 15 },
-      0x1000fa,
-      brick
-    );
-    this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 30, z: 30 },
-      0x1000fa,
-      brick
-    );
-    this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 45, z: 45 },
-      0x1000fa,
-      brick
-    );
-    this.AddFixedCube(
-      { x: 15, y: 1, z: 8 },
-      { x: 0, y: 60, z: 60 },
-      0x1000fa,
-      brick
+      0xafafaf,
+      brick,
+      rotation
     );
   }
 

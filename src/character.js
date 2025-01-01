@@ -81,9 +81,9 @@ export class CharacterController {
     });
     let characterDesc =
       this.RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(
-        0.0,
-        10.0,
-        0.0
+        this._params.start.x,
+        this._params.start.y,
+        this._params.start.z,
       );
     this.character = this.world.createRigidBody(characterDesc);
     let characterColliderDesc = this.RAPIER.ColliderDesc.cylinder(7.5, 1.5);

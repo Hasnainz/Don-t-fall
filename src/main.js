@@ -7,30 +7,33 @@ let level2 = document.getElementById("level2-button");
 let loadbutton = document.getElementById("load-button");
 
 let level = 1;
-let app = null;
+instructions.style.display = "none";
+let app = new World(level);
 
-document.addEventListener("keydown", (event) => {
-  if (event.code == "Escape") {
-    if (app != null) {
-      instructions.style.display = "";
-    }
-  }
-});
+// let app = null;
 
-level1.addEventListener("click", () => {
-  level = 1;
-  loadbutton.innerText = "load level 1";
-});
+// document.addEventListener("keydown", (event) => {
+//   if (event.code == "Escape") {
+//     if (app != null) {
+//       instructions.style.display = "";
+//     }
+//   }
+// });
 
-level2.addEventListener("click", () => {
-  level = 2;
-  loadbutton.innerText = "load level 2";
-});
+// level1.addEventListener("click", () => {
+//   level = 1;
+//   loadbutton.innerText = "load level 1";
+// });
 
-loadbutton.addEventListener("click", () => {
-  instructions.style.display = "none";
-  if(app != null) {
-    app.Cleanup();
-  }
-    app = new World(level);
-});
+// level2.addEventListener("click", () => {
+//   level = 2;
+//   loadbutton.innerText = "load level 2";
+// });
+
+// loadbutton.addEventListener("click", () => {
+//   instructions.style.display = "none";
+//   if(app != null) {
+//     app.Cleanup();
+//   }
+//     app = new World(level);
+// });
