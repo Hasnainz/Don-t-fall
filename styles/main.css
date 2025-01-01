@@ -1,0 +1,57 @@
+body {
+  margin: 0;
+  background-color: #221;
+}
+
+.outer-box {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.instructions {
+  margin: 0 auto;
+  color: #edf6b5;
+  text-align: center;
+  font-family: "Press Start 2P";
+  font-size: 16px;
+  text-transform: uppercase;
+}
+
+.spacer{
+  padding-top: 6%;
+  padding-bottom: 6%;
+}
+
+.level-button {
+  display: block;
+  font-family: "Press Start 2P";
+  font-size: 20px;
+  margin: 0 auto;
+  color: #edf6b5;
+  background-color: transparent;
+  border: transparent;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.level-button:hover {
+  color: #434d03;
+}
+
+.load-button {
+  display: block;
+  font-family: "Press Start 2P";
+  font-size: 20px;
+  margin: 0 auto;
+  color: #edf6b5;
+  background-color: transparent;
+  border: transparent;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+.load-button:hover {
+  color: #535a27;
+}
