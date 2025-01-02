@@ -1,1 +1,1 @@
-# A third person jumping game made using ThreeJS and RAPIERjs.
+## A third person jumping game made using ThreeJS and RAPIERjs
