@@ -196,13 +196,13 @@ export class IdleState extends State {
   Update(_, input) {
     if (input.key._keys.forward) {
       this._parent.SetState("walk");
-    } 
+    }
     if (input.key._keys.backward) {
       this._parent.SetState("walkback");
     }
     if (input.key._keys.dance) {
       this._parent.SetState("dance");
-    }  
+    }
     if (input.key._keys.space && input.jump) {
       this._parent.SetState("jump");
     }
@@ -261,7 +261,6 @@ export class WalkBackState extends State {
     const curAction = this._parent._animations["walkback"].action;
     curAction.enabled = true;
     curAction.play();
-
   }
 
   Exit() {}
@@ -271,8 +270,7 @@ export class WalkBackState extends State {
       this._parent.SetState("jump");
     } else if (input.key._keys.forward) {
       this._parent.SetState("walk");
-    } else {
-      this._parent.SetState("idle");
     }
+    this._parent.SetState("idle");
   }
 }

@@ -13,7 +13,7 @@ export class CharacterController {
     this.loaded = false;
     this._params = params;
     this._decceleration = new THREE.Vector3(-5.0, -0.8, -5.0);
-    this._acceleration = new THREE.Vector3(0.4, 0.5, 0.4);
+    this._acceleration = new THREE.Vector3(0.4, 0.5, 0.5);
     this._velocity = new THREE.Vector3(0, 0, 0);
 
     this._animations = {};
@@ -83,7 +83,7 @@ export class CharacterController {
       this.RAPIER.RigidBodyDesc.kinematicPositionBased().setTranslation(
         this._params.start.x,
         this._params.start.y,
-        this._params.start.z,
+        this._params.start.z
       );
     this.character = this.world.createRigidBody(characterDesc);
     let characterColliderDesc = this.RAPIER.ColliderDesc.cylinder(7.5, 1.5);
@@ -93,6 +93,10 @@ export class CharacterController {
     );
 
     this.characterController = this.world.createCharacterController(0.1);
+    // Don’t allow climbing slopes larger than 45 degrees.
+    this.characterController.setMaxSlopeClimbAngle((45 * Math.PI) / 180);
+    // Automatically slide down on slopes smaller than 30 degrees.
+    this.characterController.setMinSlopeSlideAngle((10 * Math.PI) / 180);
     // this.characterCylinder = new THREE.Mesh(
     //   new THREE.CylinderGeometry(1.5, 1.5, 15),
     //   new THREE.MeshPhongMaterial({ color: 0x0fa0a0 })
@@ -121,7 +125,6 @@ export class CharacterController {
     velocity.z +=
       Math.sign(frameDecceleration.z) *
       Math.min(Math.abs(frameDecceleration.z), Math.abs(velocity.z));
-
 
     const controlObject = this._target;
     const acc = this._acceleration.clone();
@@ -156,12 +159,12 @@ export class CharacterController {
     const rotation = controlObject.quaternion.clone();
 
     if (this._input._keys.left) {
-      A.set(0,1,0);
+      A.set(0, 1, 0);
       Q.setFromAxisAngle(A, Math.PI * timeInSeconds * acc.x);
       rotation.multiply(Q);
     }
     if (this._input._keys.right) {
-      A.set(0,1,0);
+      A.set(0, 1, 0);
       Q.setFromAxisAngle(A, -Math.PI * timeInSeconds * acc.x);
       rotation.multiply(Q);
     }
@@ -186,14 +189,11 @@ export class CharacterController {
 
     const rotatedVelocity = sideways.add(upwards).add(forward);
 
-
-
     this.characterController.computeColliderMovement(this.characterCollider, {
       x: rotatedVelocity.x,
       y: rotatedVelocity.y,
       z: rotatedVelocity.z,
     });
-
 
     let movement = this.characterController.computedMovement();
     let newPos = this.character.translation();
