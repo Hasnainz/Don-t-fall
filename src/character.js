@@ -2,8 +2,6 @@ import * as THREE from "three";
 import { FBXLoader } from "three/examples/jsm/Addons.js";
 import { CharacterControllerInput } from "./input";
 import { CharacterStateMachine } from "./statemachine";
-import { Physics } from "./physics";
-import { ThirdPersonCamera } from "./camera";
 
 export class CharacterController {
   constructor(params) {
@@ -12,14 +10,13 @@ export class CharacterController {
   _Initialize(params) {
     this.loaded = false;
     this._params = params;
-    this._decceleration = new THREE.Vector3(-5.0, -0.8, -5.0);
-    this._acceleration = new THREE.Vector3(0.4, 0.5, 0.5);
+    this._decceleration = new THREE.Vector3(-0.005, -3, -7.0);
+    this._acceleration = new THREE.Vector3(0.3, 3.5, 3);
     this._velocity = new THREE.Vector3(0, 0, 0);
 
     this._animations = {};
     this._input = new CharacterControllerInput();
     this._stateMachine = new CharacterStateMachine(this._animations);
-    this._collisions = new Physics();
     this._jump = false;
     this.RAPIER = params.RAPIER;
     this.world = params.world;
@@ -93,10 +90,9 @@ export class CharacterController {
     );
 
     this.characterController = this.world.createCharacterController(0.1);
-    // Don’t allow climbing slopes larger than 45 degrees.
     this.characterController.setMaxSlopeClimbAngle((45 * Math.PI) / 180);
-    // Automatically slide down on slopes smaller than 30 degrees.
     this.characterController.setMinSlopeSlideAngle((10 * Math.PI) / 180);
+
     // this.characterCylinder = new THREE.Mesh(
     //   new THREE.CylinderGeometry(1.5, 1.5, 15),
     //   new THREE.MeshPhongMaterial({ color: 0x0fa0a0 })
@@ -128,9 +124,10 @@ export class CharacterController {
 
     const controlObject = this._target;
     const acc = this._acceleration.clone();
+    const sprint = new THREE.Vector3(3.0, 1, 3.0);
 
     if (this._input._keys.shift && this._input._keys.forward) {
-      acc.multiply(new THREE.Vector3(3.0, 1, 3.0));
+      acc.multiply(sprint);
     }
 
     if (this._input._keys.dance) {
@@ -174,20 +171,24 @@ export class CharacterController {
     const forward = new THREE.Vector3(0, 0, 1);
     forward.applyQuaternion(controlObject.quaternion);
     forward.normalize();
+    // forward.multiplyScalar(t);
 
     const sideways = new THREE.Vector3(1, 0, 0);
     sideways.applyQuaternion(controlObject.quaternion);
     sideways.normalize();
+    // sideways.multiplyScalar(t);
 
     const upwards = new THREE.Vector3(0, 1, 0);
     upwards.applyQuaternion(controlObject.quaternion);
     upwards.normalize();
+    // upwards.multiplyScalar(t);
 
     sideways.multiplyScalar(velocity.x);
     forward.multiplyScalar(velocity.z);
     upwards.multiplyScalar(velocity.y);
 
     const rotatedVelocity = sideways.add(upwards).add(forward);
+    // rotatedVelocity.multiplyScalar(t);
 
     this.characterController.computeColliderMovement(this.characterCollider, {
       x: rotatedVelocity.x,

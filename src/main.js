@@ -1,5 +1,4 @@
 import { World } from "./world";
-import * as THREE from "three";
 
 let instructions = document.getElementById("instructions");
 let level1 = document.getElementById("level1-button");

@@ -88,7 +88,7 @@ export class World {
     }
 
     this._mixers = [];
-    this._previousRAF = 0;
+    this._previousRAF = null;
 
     this._LoadAnimatedModel(RAPIER);
 
@@ -444,7 +444,11 @@ export class World {
   }
   _RequestAnimationFrame() {
     requestAnimationFrame((t) => {
+      if (this._previousRAF === null) {
+        this._previousRAF = t;
+      }
       this._RequestAnimationFrame();
+
       this._threejs.render(this._scene, this._camera);
       this._Step(t - this._previousRAF);
       this._previousRAF = t;
